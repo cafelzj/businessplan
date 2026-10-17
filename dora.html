@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="DORA 敏捷 BI Agent 框架：系统架构、实时交互、定期跑批、交付物管理与管理员控制台规划。">
+  <title>DORA · 从数据分析到定时交付</title>
+  <link rel="stylesheet" href="dora.css">
+  <script src="dora.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳转到主要内容</a>
+  <header class="site-header">
+    <a class="brand" href="dora.html"><span class="logo" aria-hidden="true">d.</span><span>DORA <small>敏捷 BI · AGENT 框架</small></span></a>
+    <nav aria-label="页面导航"><a href="index.html">MCP 蓝图 ↗</a><a href="#architecture">架构</a><a href="#flows">流程</a><a href="#console">控制台</a></nav>
+    <span class="planning-badge">方案设计稿</span>
+  </header>
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> DATA → ANALYSIS → DELIVERY</div>
+        <h1 id="hero-title">让分析自动发生，<br>让结果<span>按时抵达。</span></h1>
+        <p class="hero-copy">DORA 是面向敏捷 BI 的 Agent 框架。将数据团队开发的 Skill 绑定到不同 Agent，在 Session 中完成取数、分析与图表生成，通过文字或交付物服务用户。</p>
+        <div class="hero-actions"><a class="primary-link" href="#architecture">查看系统架构 <span>↓</span></a><a class="quiet-link" href="#delivery">为什么生成与推送要分开？ ↗</a></div>
+      </div>
+      <aside class="hero-clock" aria-label="定期跑批交付时间示例">
+        <div class="clock-top"><span>当前优先路径</span><span class="tiny-pill">定期跑批</span></div>
+        <div class="clock-line"><b>02:00</b><span>开始分析</span></div>
+        <div class="clock-line"><b>03:00</b><span>交付物就绪</span></div>
+        <div class="clock-line accent"><b>10:00</b><span>按配置推送</span></div>
+        <p>生成有自己的时钟，交付也有。<br><small>时间仅为示例，运行与推送分别配置。</small></p>
+      </aside>
+    </section>
+
+    <section class="concepts" aria-label="四个核心概念">
+      <article><span class="concept-no">01 / AGENT</span><h2>执行角色</h2><p>不同 Agent 绑定不同 Skill，承接不同分析任务。</p></article>
+      <article><span class="concept-no">02 / SKILL</span><h2>专业能力</h2><p>由数据团队开发，封装取数、分析、归因、制图等能力。</p></article>
+      <article><span class="concept-no">03 / SESSION</span><h2>一次运行上下文</h2><p>运行时通常新建 Session；实时对话可在同一 Session 中继续。</p></article>
+      <article><span class="concept-no">04 / ARTIFACT</span><h2>可获取的交付物</h2><p>生成的 HTML、XLSX、DOCX 等文件；Markdown 文字是另一类输出。</p></article>
+    </section>
+
+    <section id="architecture" class="page-section" aria-labelledby="architecture-title">
+      <div class="section-heading"><div><div class="eyebrow">01 / SYSTEM ARCHITECTURE</div><h2 id="architecture-title">同一套分析内核，两种运行方式。</h2><p>实时交互与定期跑批共用 Agent、Skill 和 Session；新增控制台统一管理运行与交付。</p></div><span class="outline-pill">虚线边框 = 建议新增 / 待建设</span></div>
+      <div class="architecture-canvas">
+        <div class="trigger-row">
+          <div class="trigger"><span class="diagram-label">实时入口</span><strong>用户自然语言交互</strong><small>问题 / 追问 → Agent</small></div>
+          <div class="trigger batch"><span class="diagram-label">定期入口 · 当前优先</span><strong>系统定期触发</strong><small>跑批配置 → 调度执行 · 例如 02:00</small></div>
+        </div>
+        <div class="down-arrow" aria-hidden="true">↓ <span>指定 Agent · 发起问题 / 任务</span> ↓</div>
+        <div class="engine-and-bi">
+          <div class="engine">
+            <div class="diagram-heading"><span class="engine-dot"></span><h3>DORA Agent 运行框架</h3></div>
+            <div class="agent-binding"><div><span class="diagram-label">数据团队开发</span><strong>Skill 能力库</strong><small>取数 · 分析 · 归因 · 制图</small></div><span class="binding-arrow">绑定 →</span><div><span class="diagram-label">按场景配置</span><strong>Agent A / B / …</strong><small>不同 Agent 绑定不同 Skill</small></div></div>
+            <div class="session-box"><div class="session-heading"><strong>Session</strong><span>任务状态 · 执行记录 · 输出关联</span></div><ol class="execution-steps"><li><b>1</b><span>创建运行上下文</span></li><li><b>2</b><span>获取 BI 数据与报表</span></li><li><b>3</b><span>调用 Skill 分析 / 归因</span></li><li><b>4</b><span>生成文字 / 图表 / 文件</span></li></ol></div>
+          </div>
+          <div class="bi-link"><span>读取</span><b aria-hidden="true">←</b></div>
+          <aside class="bi-source"><div class="diagram-label">DATA SOURCE</div><h3>敏捷 BI</h3><p>自助报表工具</p><div>敏捷 BI 中的数据集</div><div>用户创作的分析报表</div><div>用于报表创作的数据集</div><small>按任务选择分析输入</small></aside>
+        </div>
+        <div class="down-arrow" aria-hidden="true">↓ <span>Session 产出与关联</span> ↓</div>
+        <div class="output-row">
+          <div class="text-output"><span class="output-icon" aria-hidden="true">Md</span><div><h3>Markdown 文字回复</h3><p>实时交互中返回用户，可继续追问。</p></div></div>
+          <div class="artifact-output"><span class="output-icon" aria-hidden="true">↗</span><div><h3>Artifact 文件交付物</h3><p>HTML 网页 / XLSX / DOCX 等，关联产生它的 Session。</p></div></div>
+        </div>
+        <div class="artifact-route"><span aria-hidden="true">↓</span> 文件获取 / 归集 · Session 状态同步 <span class="suggestion-label">建议链路</span></div>
+        <div class="control-band proposed"><div class="diagram-heading"><h3>管理员控制台</h3><span class="suggestion-label">待建设</span></div><div class="control-functions"><div><strong>Agent / Session 总览</strong><small>查看所有 Agent、运行与异常</small></div><div><strong>交付物获取与管理</strong><small>按 Session 查找 / 预览 / 下载</small></div><div><strong>跑批与推送配置</strong><small>执行时间 / 推送时间 / 接收用户</small></div><div><strong>独立定时推送</strong><small>就绪文件 → 到达推送时间 → 接收用户</small></div></div></div>
+        <div class="diagram-note">架构中的控制台、文件归集及状态同步方式为设计建议。实时交互的 Markdown 可直接返回用户；文件可直接获取，也可由控制台按批次配置统一交付。具体系统接口待实施确认。</div>
+      </div>
+    </section>
+
+    <section id="flows" class="page-section" aria-labelledby="flows-title">
+      <div class="section-heading"><div><div class="eyebrow">02 / EXECUTION FLOWS</div><h2 id="flows-title">把“如何生成”和“如何交付”画清楚。</h2><p>切换两种方式，查看从问题到结果的完整路径。</p></div><div class="segmented" role="tablist" aria-label="运行方式"><button id="batch-tab" role="tab" aria-selected="true" aria-controls="batch-flow" tabindex="0">定期跑批 <span>当前优先</span></button><button id="live-tab" role="tab" aria-selected="false" aria-controls="live-flow" tabindex="-1">实时交互</button></div></div>
+      <div id="batch-flow" class="flow-panel" role="tabpanel" aria-labelledby="batch-tab" tabindex="0">
+        <div class="flow-intro"><span class="mode-label">BATCH MODE</span><p>将计算集中在计划时段，先生成文件，再在指定时间推送。</p></div>
+        <ol class="flow-track"><li><span class="flow-number">01</span><h3>配置任务</h3><p>指定 Agent、问题 / 参数、执行计划、接收用户与推送时间。</p><small>管理员 · 控制台</small></li><li><span class="flow-number">02</span><h3>定时触发</h3><p>例如 02:00 创建本次批次，发起 Agent 运行。</p><small>系统 · 调度执行</small></li><li><span class="flow-number">03</span><h3>创建 Session</h3><p>记录本次运行上下文，绑定任务与批次，开始取数分析。</p><small>DORA · Agent + Skill</small></li><li><span class="flow-number">04</span><h3>生成交付物</h3><p>例如 03:00 完成分析，获取文件并登记到对应 Session。</p><small>HTML / XLSX / DOCX</small></li><li><span class="flow-number">05</span><h3>等待推送</h3><p>交付物已就绪，保留待推送记录，等待 10:00。</p><small>控制台 · 独立交付计划</small></li><li><span class="flow-number">06</span><h3>到点交付</h3><p>校验文件就绪与用户权限，执行推送并记录结果。</p><small>接收用户 · 渠道待定</small></li></ol>
+        <div class="flow-callout"><strong>运行完成 ≠ 推送完成</strong><span>建议将 Session 执行状态与推送状态分别保存；推送失败时重试交付，无需重新进行数据分析。</span></div>
+      </div>
+      <div id="live-flow" class="flow-panel" role="tabpanel" aria-labelledby="live-tab" tabindex="0" hidden>
+        <div class="flow-intro"><span class="mode-label">LIVE MODE</span><p>用户通过自然语言提问与追问，Agent 在 Session 中返回结果。</p></div>
+        <ol class="flow-track live-track"><li><span class="flow-number">01</span><h3>用户提问</h3><p>选择相应 Agent，输入自然语言问题。</p><small>实时入口</small></li><li><span class="flow-number">02</span><h3>建立 Session</h3><p>新任务通常创建新 Session，后续追问可复用该上下文。</p><small>运行上下文</small></li><li><span class="flow-number">03</span><h3>取数与分析</h3><p>获取 BI 数据集或分析报表，调用绑定的 Skill。</p><small>分析 / 归因 / 制图</small></li><li><span class="flow-number">04</span><h3>返回结果</h3><p>直接回复 Markdown，或生成可获取的文件交付物。</p><small>文字 / Artifact</small></li><li><span class="flow-number">05</span><h3>继续交互</h3><p>用户获取文件或继续追问；新一轮分析可产生新交付物。</p><small>追问 → 取数与分析 ↺</small></li></ol>
+        <div class="flow-callout"><strong>保留实时入口，当前以跑批为主</strong><span>算力约束影响运行策略，Agent / Skill / Session 的核心模型保持一致。并发上限与资源配额可后续配置。</span></div>
+      </div>
+    </section>
+
+    <section id="delivery" class="delivery-section page-section" aria-labelledby="delivery-title">
+      <div class="section-heading"><div><div class="eyebrow">03 / TWO INDEPENDENT CLOCKS</div><h2 id="delivery-title">凌晨算完，上午送达。</h2><p>点击时间节点，观察执行状态与推送状态如何分别变化。以下均为流程示意。</p></div><span class="outline-pill">示例时区：Asia/Shanghai</span></div>
+      <div class="timeline-controls" role="group" aria-label="查看示例时点"><button class="time-point" data-phase="0" aria-pressed="false"><b>02:00</b><span>开始跑批</span></button><button class="time-point selected" data-phase="1" aria-pressed="true"><b>03:00</b><span>文件就绪</span></button><button class="time-point" data-phase="2" aria-pressed="false"><b>10:00</b><span>计划推送</span></button></div>
+      <div id="phase-description" class="phase-description" aria-live="polite"><div><span class="status-label">Session 执行状态</span><strong id="run-phase">已完成</strong><p id="run-description">分析结束，文件交付物已生成并可获取。</p></div><span class="phase-divider" aria-hidden="true">/</span><div><span class="status-label">交付推送状态</span><strong id="delivery-phase">等待推送</strong><p id="delivery-description">距计划推送尚有 7 小时，不在生成完成时立即发送。</p></div></div>
+      <div class="delivery-rules"><article><span>01</span><div><h3>文件先就绪，推送再执行</h3><p>建议只有文件完整可用且达到推送时刻才发送；没有文件或 Session 异常时转入异常处理。</p></div></article><article><span>02</span><div><h3>未按时完成，也要有明确策略</h3><p>若 10:00 仍未生成，需配置延迟推送或跳过并告警；不把空文件或上次结果当作本次成功。</p></div></article><article><span>03</span><div><h3>交付失败，追踪到具体用户</h3><p>建议记录批次、Artifact、接收用户和发送结果，避免重复推送；渠道失败可单独重试。</p></div></article></div>
+    </section>
+
+    <section id="console" class="page-section" aria-labelledby="console-title">
+      <div class="section-heading"><div><div class="eyebrow">04 / ADMIN CONSOLE</div><h2 id="console-title">管理员看得到运行，也拿得到结果。</h2><p>首期面向管理员，覆盖所有 Agent、Session、异常、交付物与定时推送。</p></div><span class="outline-pill">交互原型 · 示例数据</span></div>
+      <div class="console-shell">
+        <div class="console-toolbar"><div><span class="console-live-dot" aria-hidden="true"></span><strong>DORA 管理控制台</strong><span class="demo-label">演示</span></div><label>运行状态 <select id="session-filter"><option value="all">全部 Session</option><option value="done">已完成</option><option value="running">运行中</option><option value="error">异常</option></select></label></div>
+        <div class="console-metrics"><div><small>示例 Agent</small><strong>3</strong></div><div><small>示例 Session</small><strong>3</strong></div><div><small>异常待处理</small><strong>1</strong></div><div><small>已就绪交付物</small><strong>2</strong></div></div>
+        <div class="table-scroll" role="region" aria-label="示例 Session 列表，可横向滚动" tabindex="0"><table><caption class="sr-only">管理员控制台 Session 与推送状态示例</caption><thead><tr><th scope="col">Agent / 任务</th><th scope="col">Session</th><th scope="col">执行状态</th><th scope="col">交付物</th><th scope="col">推送计划</th><th scope="col">推送状态</th><th scope="col">查看</th></tr></thead><tbody id="session-rows"></tbody></table></div>
+        <p class="console-caption">示例展示 03:00 时刻的不同任务状态；点击“详情”查看 Session 与交付物的关联。此页面不连接 DORA，也不执行真实推送。</p>
+      </div>
+      <div class="console-modules"><article><h3>Agent 目录</h3><p>查看所有 Agent、绑定的 Skill 与版本，以及对应的运行记录。</p></article><article><h3>Session 监控</h3><p>查看是否完成或异常、运行阶段、起止时间和错误信息。</p></article><article><h3>Artifact 中心</h3><p>按任务与 Session 获取文件，提供预览 / 下载入口及生成时间。</p></article><article><h3>计划与交付</h3><p>分别维护执行和推送时间、接收用户、交付状态与重试记录。</p></article></div>
+    </section>
+
+    <section class="object-section page-section" aria-labelledby="object-title"><div class="section-heading"><div><div class="eyebrow">05 / OBJECT RELATIONSHIPS</div><h2 id="object-title">每份交付物，都能找到它的来处。</h2><p>建议的对象关系，帮助控制台查询、问题定位与推送追踪。</p></div></div><div class="relationship-chain"><div><b>跑批配置</b><small>Agent / 问题 / 执行与推送计划</small></div><span>1 → N</span><div><b>执行批次</b><small>记录一次计划执行</small></div><span>1 → N</span><div><b>Session</b><small>每次执行尝试独立关联</small></div><span>1 → 0…N</span><div><b>Artifact</b><small>文件 / 生成时间 / 获取位置</small></div></div><p class="object-note">每次批次运行通常创建一个 Session，重试可新增 Session。建议从本次成功运行中选择交付物，建立关联接收用户、推送时间与状态的交付记录；实时 Session 可不属于跑批配置，Markdown 回复也不必生成文件。</p></section>
+
+    <section class="decisions" aria-labelledby="decisions-title"><h2 id="decisions-title">落地前，需要确认的三个接口边界</h2><div><article><span>01</span><h3>DORA 的运行与结果接口</h3><p>如何列举 Agent、创建 / 查询 Session、获取异常与 Artifact；采用轮询还是完成回调，取决于 DORA 现有能力。</p></article><article><span>02</span><h3>文件保留与交付渠道</h3><p>文件由 DORA 保管还是归集存储；文件 / 链接如何推送、接收用户如何映射、保留多久，均需确认。</p></article><article><span>03</span><h3>时区、超时与重试策略</h3><p>分别约定执行与推送时区、超时阈值、迟到处理、失败重试和重复发送控制。</p></article></div></section>
+    <footer><a href="index.html">← MCP 企业智能服务蓝图</a><p>DORA · 规划与架构讨论稿<br>基于业务描述绘制；控制台及配套机制为建议方案，不代表已上线能力。</p><a href="#main">回到顶部 ↑</a></footer>
+  </main>
+  <dialog id="session-dialog" aria-labelledby="session-dialog-title"><button id="close-dialog" aria-label="关闭 Session 详情">×</button><div class="eyebrow">SESSION DETAIL · 示例</div><h2 id="session-dialog-title"></h2><div id="session-detail"></div></dialog>
+</body>
+</html>
